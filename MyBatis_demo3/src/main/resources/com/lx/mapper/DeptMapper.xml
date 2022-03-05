@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lx.mapper.DeptMapper">
+
+    <resultMap id="deptAndEmpResultMap" type="Dept">
+        <id property="did" column="did"/>
+        <result property="deptName" column="dept_name" />
+        <collection property="emps" ofType="Emp">
+            <!--实体类属性名是啥property就等于啥，collection里的是ofType而不是javaType-->
+            <id property="eid" column="eid"/>
+            <result property="empName" column="emp_name" />
+            <result property="age" column="age" />
+            <result property="sex" column="sex" />
+            <result property="email" column="email" />
+            <!--此时Emp实体类中有private Dept dept; 但是我们不要把这个也写在result标签里，切记！-->
+        </collection>
+    </resultMap>
+
+    <select id="getDeptAndEmp" resultMap="deptAndEmpResultMap">
+        select * from t_dept left join t_emp on t_dept.did=t_emp.did where t_dept.did=#{did}
+    </select>
+
+</mapper>

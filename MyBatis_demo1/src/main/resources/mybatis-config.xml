@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!--引入properties文件，此时就可以${属性名}的方式访问属性值-->
+    <properties resource="jdbc.properties"></properties>
+
+
+    <typeAliases>
+        <!--<typeAlias type="com.atguigu.mybatis.bean.User" />-->  <!--默认的别名-->
+        <!--<typeAlias type="com.atguigu.mybatis.bean.User" alias="abc" />-->  <!--类名为abc-->
+        <!--
+            typeAlias：设置某个实体类的别名
+            属性：
+                type：需要设置别名的实体类的全类名路径
+                alias：设置此实体类的别名，若不设置此属性，该类型拥有默认的别名，即类名，且不区分大小写
+                       若设置此属性，此时该类型的别名只能使用alias所设置的值
+        -->
+
+        <package name="com.lx.pojo"/>
+        <!--以包为单位，设置改包下所有的类型都拥有默认的别名，即类名且不区分大小写-->
+    </typeAliases>
+
+    <!--设置连接数据库的环境-->
+    <environments default="development">
+        <!--
+            environments：设置多个连接数据库的环境
+            属性：
+                default：设置默认使用的环境(default等于environment标签里的id=xxx，也就是说你想用哪个就填上哪个值)
+        -->
+        <environment id="development">
+            <!--
+                environment：设置具体的连接数据库的环境信息（environment有多个，在environments的default确定使用哪个）
+                属性：
+                    id：设置环境的唯一标识，可在environments标签中的default设置你想要用的environment的id，
+                        来表示默认使用的环境
+            -->
+            <transactionManager type="JDBC"/>
+            <!--
+                transactionManager：设置事务管理方式
+                属性：
+                    type：设置事务管理方式，type="JDBC|MANAGED"
+                    type="JDBC"：设置当前环境的事务管理都必须手动处理
+                    type="MANAGED"：设置事务被管理，例如spring中的AOP
+
+            -->
+            <dataSource type="POOLED">
+                <!--
+                    dataSource：设置数据源（数据库的账号密码等）
+                    属性：
+                        type：设置数据源的类型，type="POOLED|UNPOOLED|JNDI"
+                        type="POOLED"：使用数据库连接池，即会将创建的连接进行缓存，下次使用可以从
+                                       缓存中直接获取，不需要重新创建
+                        type="UNPOOLED"：不使用数据库连接池，即每次使用连接都需要重新创建
+                        type="JNDI"：使用上下文中的数据源
+                -->
+
+
+            </dataSource>
+        </environment>
+    </environments>
+    <!--引入映射文件-->
+    <mappers>
+        <!--<mapper resource="mappers/UserMapper.xml"/>-->
+        <!--
+            以包为单位，将包下所有的映射文件引入核心配置文件
+            注意：1.此方式必须保证mapper接口和mapper映射文件必须在相同的包下
+                 2.mapper接口和mapper映射文件的名字要一样 （例如：UserMapper）
+        -->
+        <package name="com.lx.mapper"/>
+    </mappers>
+</configuration>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lx.mapper.ParameterMapper">
+
+    <select id="getAllUser" resultType="User">
+        select * from t_user
+    </select>
+
+
+    <!--1.mapper接口中的方法参数为单个的字面量类型-->
+    <select id="getUserByUsername" resultType="User">
+        <!--select * from t_user where username = #{username} -->
+        select * from t_user where username = '${username}'
+    </select>
+
+    <!--2.若mapper接口中的方法参数为多个时-->
+    <select id="checkLogin" resultType="User">
+        <!--select * from t_user where username='${param1}' and password ='${param2}'-->
+        select * from t_user where username=#{arg0} and password =#{arg1}
+    </select>
+
+    <!--3.map集合类型的参数    mapper接口中的方法需要的参数为多个时 -->
+    <select id="checkLoginByMap" resultType="User">
+        <!--select * from t_user where username='${username}' and password ='${password}'-->
+        select * from t_user where username=#{username} and password =#{password}
+    </select>
+
+    <!--4.mapper接口中的方法参数为实体类对象 -->
+    <insert id="insertUser">
+        insert  into t_user values (null,#{username},#{password},#{age},#{sex},#{email})
+    </insert>
+
+    <!--5.使用@Param标识参数   通过@Param注解标识mapper接口中的方法参数 -->
+    <select id="checkLoginByParam" resultType="User">
+        select * from t_user where username=#{username} and password =#{password}
+    </select>
+</mapper>

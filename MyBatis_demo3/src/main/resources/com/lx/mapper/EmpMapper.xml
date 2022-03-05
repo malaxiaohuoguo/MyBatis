@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <mapper namespace="com.lx.mapper.EmpMapper">
+
+    <resultMap id="empResultMap" type="Emp">
+        <id property="eid" column="eid" />
+        <result property="empName" column="emp_name" />
+        <result property="age" column="age" />
+        <result property="sex" column="sex" />
+        <result property="email" column="email" />
+    </resultMap>
+
+    <!-- 解决字段名和属性名不一致的情况（第一种）
+         在sql语句中给名字不一样的字段起别名
+    -->
+    <select id="getAllEmp111" resultType="Emp">
+        select eid,emp_name empName,age,sex,email from t_emp
+    </select>
+
+    <!--解决字段名和属性名不一致的情况（第二种）
+        在核心配置文件里设置settings标签，可以自动把下划线转为驼峰
+    -->
+    <select id="getAllEmp222" resultType="Emp">
+        select * from t_emp
+    </select>
+
+
+    <!--解决字段名和属性名不一致的情况（第三种）-->
+    <select id="getAllEmp" resultMap="empResultMap">
+        select * from t_emp
+    </select>
+
+    <!--处理多对一映射关系方式一-->
+    <resultMap id="empAndDeptResultMap1" type="Emp">
+        <id property="eid" column="eid" />
+        <result property="empName" column="emp_name" />
+        <result property="age" column="age" />
+        <result property="sex" column="sex" />
+        <result property="email" column="email" />
+        <result property="dept.did" column="did" />
+        <result property="dept.deptName" column="dept_name" />
+    </resultMap>
+
+    <select id="getEmpAndDept1" resultMap="empAndDeptResultMap1">
+        select * from t_emp left join t_dept on t_emp.did=t_dept.did where t_emp.eid=#{eid}
+    </select>
+
+    <!--处理多对一映射关系方式二-->
+    <resultMap id="empAndDeptResultMap2" type="Emp">
+        <id property="eid" column="eid" />
+        <result property="empName" column="emp_name" />
+        <result property="age" column="age" />
+        <result property="sex" column="sex" />
+        <result property="email" column="email" />
+        <association property="dept" javaType="Dept">
+            <id property="did" column="did" />
+            <result property="deptName" column="dept_name" />
+        </association>
+    </resultMap>
+
+    <select id="getEmpAndDept" resultMap="empAndDeptResultMap2">
+        select * from t_emp left join t_dept on t_emp.did=t_dept.did where t_emp.eid=#{eid}
+    </select>
+
+</mapper>
